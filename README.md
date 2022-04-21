@@ -27,10 +27,11 @@ Com a aplicação devidamente executando com o docker execute o comand abaixo nu
 
     docker ps
 
-Localize o container onde está a aplicação e copie seu ID, ele estará sob o nome de NODEJS_SERVER_TEST.
+Localize o container onde está a aplicação e copie seu ID, ele estará junto do container chamado de NODEJS_SERVER_TEST.
 
 Após isso digite o seguinte comando:
-    docker exec -it (o id copiado do container) bash
+    
+	docker exec -it (o id copiado do container) bash
 
 Após a tela se abrir execute o comando
     npm run test
