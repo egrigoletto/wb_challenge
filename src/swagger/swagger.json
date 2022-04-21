@@ -1,0 +1,236 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Serviço de Recuperação de dados bancários",
+    "description": "Willbank challenge",
+    "contact": {
+      "email": "eduardo.grigoletto@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+     "url": "http://localhost:8080",
+     "description": "API de testes"
+    }
+  ],
+  "paths": {
+    "/example": {
+      "get": {
+        "description": "Mostra mensagem de exemplo",
+        "summary": "Exemplo",
+        "tags": ["Example"],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Example"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customer/balance": {
+      "post": {
+        "description": "Recupera os dados de saldo de uma conta",
+        "summary": "Recupera saldo",
+        "tags": ["Balance"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Balance"
+              },
+              "examples": {
+                "account": {
+                  "value": {
+                    "agencia": "2077",
+                    "conta": "54459-7"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Recuperado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Balance"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Saldo indisponível - dados incompatíveis",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/BalanceNotPrecessed"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço Indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/ServiceUnavaliableError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customer/resend_transaction": {
+      "post": {
+        "description": "Recupera os dados de uma chave de uma transação não processada através do seu e-mail",
+        "summary": "Recupera saldo",
+        "tags": ["Pix Key"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReprocessKey"
+              },
+              "examples": {
+                "account": {
+                  "value": {
+                    "email": "sheridancrist@lemke.info"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Reprocessado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/ReprocessKey"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Saldo indisponível - dados incompatíveis",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/UnsuccessfulReprocess"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Serviço Indisponível",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/ServiceUnavaliableError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Example": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Balance": {
+        "type": "object",
+        "properties": {
+          "agencia": {
+            "type": "string"
+          },
+          "conta": {
+            "type": "string"
+          },
+          "saldo": {
+            "type": "number"
+          }
+        }
+      },
+      "ReprocessKey": {
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "mensagem": {
+            "type": "string"
+          },
+          "agencia": {
+            "type": "string"
+          },
+          "conta": {
+            "type": "string"
+          },
+          "cpf": {
+            "type": "string"
+          },
+          "telefone": {
+            "type": "string"
+          }
+        }
+      },
+      "BalanceNotPrecessed": {
+        "type": "object",
+        "properties": {
+          "mensagem": {
+            "type": "string"
+          },
+          "motivo": {
+            "type": "string"
+          }
+        }
+      },
+      "UnsuccessfulReprocess": {
+        "type": "object",
+        "properties": {
+          "mensagem": {
+            "type": "string"
+          },
+          "motivo": {
+            "type": "string"
+          }
+        }
+      },
+      "ServiceUnavaliableError": {
+        "type": "object",
+        "properties": {
+          "mensagem": {
+            "type": "string"
+          },
+          "erro": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
